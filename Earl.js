@@ -96,6 +96,9 @@ bot.on("message", function(message){
             case "urban":
                 command.Urban();
                 break;
+            case "weather":
+                command.Weather();
+                break;
         }
     }
     

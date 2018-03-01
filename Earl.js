@@ -68,9 +68,6 @@ class Command{
         }
         var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
         if(args.length >= 2){
-            if(country.indexOf(" ") == 0){
-                country.replace(" ", "");
-            }
             if(city.indexOf(" ") == 0){
                 city.replace(" ","");
             }

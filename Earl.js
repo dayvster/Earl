@@ -53,22 +53,33 @@ class Command{
         }
     }
     Weather(){
-        try {
         var self = this;
         var args    = this.args.join(" ").split(",");
         var city    = args[1];
         var country = args[2];
         var units   = args[0];
-
-        if(city.indexOf(" ") == 0){
-            city.replace(" ","");
-        }
-        if(units.indexOf(" ") == 0){
-            units.replace(" ", "");
-        }
-        var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
-        if(args.length >= 2){
+        logger.info(args.length);
+        var uri     = "";
+        if(args.length >= 3){
+            logger.info("with country");
+            if(country.indexOf(" ") == 0){
+                country = country.replace(" ","");
+            }
+            if(city.indexOf(" ") == 0){
+                city = city.replace(" ","");
+            }
+            if(units.indexOf(" ") == 0){
+                units = units.replace(" ", "");
+            }
             uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+        }else{
+            if(city.indexOf(" ") == 0){
+                city = city.replace(" ","");
+            }
+            if(units.indexOf(" ") == 0){
+                units = units.replace(" ", "");
+            }
+            uri = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
         }
         
         var tempunit = {imperial:"°F", metric:"°C", other:"°K"};
@@ -101,9 +112,6 @@ class Command{
                 }
             }
         });
-        } catch (error) {
-            logger.error(error);
-        }
         
     }
     Help(){

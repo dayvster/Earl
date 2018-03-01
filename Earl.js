@@ -59,21 +59,49 @@ class Command{
     Weather(){
         var self = this;
         var args    = this.args.join(" ").split(",");
-        var city    = args[0];
-        var country = args[1];
-        var units   = args[2];
-        var tempunit = {imperial:"F", metric:"C", other:"K"};
+        var city    = args[1];
+        var country = args[2];
+        var units   = args[0];
+
+        if(city.indexOf(" ") == 0){
+            city.replace(" ","");
+        }
+        if(units.indexOf(" ") == 0){
+            units.replace(" ", "");
+        }
+        if(country.indexOf(" ") == 0){
+            country.replace(" ", "");
+        }
+
         var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+        if(args.length >= 2){
+            uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+        }
+        
+        var tempunit = {imperial:"°F", metric:"°C", other:"°K"};
+        var speedunit = {imperial:"mph", metric:"km/h",other: ""};
+        var pressureunit = {imperial:"bar", metric:"bar",other: "bar"};
         if(units == "" || units == undefined || units == null){
             units = "other";
         }
+        logger.info(uri);
         http(uri, function(error,response,body){
             if(error == null){
                 var r = JSON.parse(body);
                 if(r.cod == 200){
+                    var sunrise = new Date(r.sys.sunrise);
+                    var sunset = new Date(r.sys.sunset);
                     var output = "\n"+
                                  "**Weather:** "+r.weather[0].description + "\n" +
-                                 "**Temperature: **" + r.main.temp +tempunit[units];
+                                 "**Temperature: **" + r.main.temp + tempunit[units] + "\n"+ 
+                                 "**Pressure:** " + r.main.pressure + " "+ pressureunit[units] +"\n" +
+                                 "**Humidity:** " + r.main.humidity + "%" + "\n" +
+                                 "**Temp min:** " + r.main.temp_min + r.main.temp + tempunit[units] + "\n" +
+                                 "**Temp max:** " + r.main.temp_max + r.main.temp + tempunit[units] + "\n" +
+                                 "**Wind speed:** "+ r.wind.speed + " " + speedunit[units] +" at "+r.wind.deg+"deg"+ "\n" +
+                                 "**Sunrise**: "+ sunrise.getHours()+":"+sunrise.getMinutes() + "\n" +
+                                 "**Sunset**: "+ sunset.getHours()+":"+sunset.getMinutes() + "\n" ;
+
                     self.message.reply(output);
                 }else{
                     self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: Bear Mountain, US");
@@ -113,6 +141,9 @@ bot.on("message", function(message){
                 command.Weather();
                 break;
         }
+    }
+    if(message.content.toLowerCase().includes("hey earl")){
+        message.channel.send(`Hey ${message.member}`);
     }
     
 });

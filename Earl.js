@@ -66,12 +66,9 @@ class Command{
         if(units.indexOf(" ") == 0){
             units.replace(" ", "");
         }
-        var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+        var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
         if(args.length >= 2){
-            if(city.indexOf(" ") == 0){
-                city.replace(" ","");
-            }
-            uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+            uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
         }
         
         var tempunit = {imperial:"°F", metric:"°C", other:"°K"};

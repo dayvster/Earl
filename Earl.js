@@ -57,6 +57,7 @@ class Command{
         }
     }
     Weather(){
+        var self = this;
         var args    = this.args.join(" ").split(",");
         var city    = args[0];
         var country = args[1];
@@ -64,7 +65,7 @@ class Command{
         http(uri, function(error,response,body){
             if(error == null){
                 var r = JSON.parse(body);
-                this.message.reply(r.main.temp);
+                self.message.reply(r.main.temp);
             }
         });
     }

@@ -69,12 +69,11 @@ class Command{
         if(units.indexOf(" ") == 0){
             units.replace(" ", "");
         }
-        if(country.indexOf(" ") == 0){
-            country.replace(" ", "");
-        }
-
         var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
         if(args.length >= 2){
+            if(country.indexOf(" ") == 0){
+                country.replace(" ", "");
+            }
             uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
         }
         
@@ -96,8 +95,8 @@ class Command{
                                  "**Temperature: **" + r.main.temp + tempunit[units] + "\n"+ 
                                  "**Pressure:** " + r.main.pressure + " "+ pressureunit[units] +"\n" +
                                  "**Humidity:** " + r.main.humidity + "%" + "\n" +
-                                 "**Temp min:** " + r.main.temp_min + r.main.temp + tempunit[units] + "\n" +
-                                 "**Temp max:** " + r.main.temp_max + r.main.temp + tempunit[units] + "\n" +
+                                 "**Temp min:** " + r.main.temp + tempunit[units] + "\n" +
+                                 "**Temp max:** " + r.main.temp + tempunit[units] + "\n" +
                                  "**Wind speed:** "+ r.wind.speed + " " + speedunit[units] +" at "+r.wind.deg+"deg"+ "\n" +
                                  "**Sunrise**: "+ sunrise.getHours()+":"+sunrise.getMinutes() + "\n" +
                                  "**Sunset**: "+ sunset.getHours()+":"+sunset.getMinutes() + "\n" ;

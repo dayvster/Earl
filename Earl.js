@@ -56,6 +56,20 @@ class Command{
             this.message.reply("https://www.google.com/search?btnI=1&q="+query);
         }
     }
+    Weather(){
+        var args    = this.args.join(" ").split(",");
+        var city    = args[0];
+        var country = args[1];
+        var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55";
+        http(uri, function(error,response,body){
+            if(error == null){
+                var r = JSON.parse(body);
+                this.message.reply(r.main.temp);
+            }
+        });
+    }
+
+
 }
 
 bot.on("ready", () => {
@@ -84,6 +98,7 @@ bot.on("message", function(message){
                 break;
         }
     }
+    
 });
 
 bot.login(auth.token);

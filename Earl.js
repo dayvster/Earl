@@ -57,6 +57,7 @@ class Command{
         }
     }
     Weather(){
+        try {
         var self = this;
         var args    = this.args.join(" ").split(",");
         var city    = args[1];
@@ -107,6 +108,10 @@ class Command{
                 }
             }
         });
+        } catch (error) {
+            logger.error(error);
+        }
+        
     }
 
 

@@ -17,10 +17,6 @@ class Command{
         this.cmd = this.args[0].substring(1,this.args[0].length);
         this.args = this.args.splice(1);
     }
-
-    Test(){
-        this.message.reply("Test test");
-    }
     Userinfo(){
         var id = this.args[0].match(/\d+/g)[0];
         var member = this.message.guild.members.get(id);
@@ -104,7 +100,7 @@ class Command{
 
                     self.message.reply(output);
                 }else{
-                    self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: Bear Mountain, US");
+                    self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: !weather [metric/imperial], Bear Mountain, US");
                 }
             }
         });
@@ -112,6 +108,18 @@ class Command{
             logger.error(error);
         }
         
+    }
+    Help(){
+        var help = [
+            "",
+            "**!google:** returns the first result from a google search",
+            "**!weather:** shows weather info for a location __example:__ !weather imperial/metric, New York, US",
+            "**!urban:** returns a definition for a word or phrase from urban dictionary",
+            "**!userinfo:** shows some cool user information",
+
+        ];
+        var output = help.join("\n");
+        this.message.reply(output);
     }
 
 
@@ -143,6 +151,9 @@ bot.on("message", function(message){
                 break;
             case "weather":
                 command.Weather();
+                break;
+            case "help":
+                command.Help();
                 break;
         }
     }

@@ -61,11 +61,23 @@ class Command{
         var args    = this.args.join(" ").split(",");
         var city    = args[0];
         var country = args[1];
-        var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55";
+        var units   = args[2];
+        var tempunit = {imperial:"F", metric:"C", other:"K"};
+        var uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+        if(units == "" || units == undefined || units == null){
+            units = "other";
+        }
         http(uri, function(error,response,body){
             if(error == null){
                 var r = JSON.parse(body);
-                self.message.reply(r.main.temp);
+                if(r.cod == 200){
+                    var output = "\n"+
+                                 "**Weather:** "+r.weather[0].description + "\n" +
+                                 "**Temperature: **" + r.main.temp +tempunit[units];
+                    self.message.reply(output);
+                }else{
+                    self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: Bear Mountain, US");
+                }
             }
         });
     }

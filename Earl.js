@@ -2,6 +2,8 @@ var http = require('request');
 var logger = require('winston');
 var auth = require('./auth.json');
 const Discord = require("discord.js");
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
 const bot = new Discord.Client();
 
 logger.remove(logger.transports.Console);
@@ -113,6 +115,20 @@ class Command{
             }
         });
         
+    }
+    Evo(){
+        var uri = "https://www.evo.com";
+        var input = encodeURIComponent(this.args.join(" "));
+
+        http(uri+"/shop?text="+input,function(error, response, body){
+            const dom = new JSDOM(body);
+            var result = dom.window.document.querySelector(".results-products .results-product-thumbs a");
+            if(result != null){
+                this.message.reply(uri+result.href);
+            }else{
+                this.message.reply("Sorry buddy, I\'m afraid I can't find that.");
+            }
+        });
     }
     Help(){
         var help = [

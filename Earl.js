@@ -119,14 +119,15 @@ class Command{
     Evo(){
         var uri = "https://www.evo.com";
         var input = encodeURIComponent(this.args.join(" "));
+        var self = this;
 
         http(uri+"/shop?text="+input,function(error, response, body){
             const dom = new JSDOM(body);
             var result = dom.window.document.querySelector(".results-products .results-product-thumbs a");
             if(result != null){
-                this.message.reply(uri+result.href);
+                self.message.reply(uri+result.href);
             }else{
-                this.message.reply("Sorry buddy, I\'m afraid I can't find that.");
+                self.message.reply("Sorry buddy, I\'m afraid I can't find that.");
             }
         });
     }
@@ -175,6 +176,9 @@ bot.on("message", function(message){
                 break;
             case "help":
                 command.Help();
+                break;
+            case "evo":
+                command.Evo();
                 break;
         }
     }

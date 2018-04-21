@@ -23,7 +23,7 @@ class Command{
         var id = this.args[0].match(/\d+/g)[0];
         var member = this.message.guild.members.get(id);
         var joinedDate = new Date(member.joinedAt); 
-        var hrole = member.presence.name;
+        var hrole = member.highestRole.name;
         if(hrole.includes("@")){
             hrole.replace("@","");
         }
@@ -59,63 +59,67 @@ class Command{
         }
     }
     Weather(){
-        var self = this;
-        var args    = this.args.join(" ").split(",");
-        var city    = args[1];
-        var country = args[2];
-        var units   = args[0];
-        logger.info(args.length);
-        var uri     = "";
-        if(args.length >= 3){
-            logger.info("with country");
-            if(country.indexOf(" ") == 0){
-                country = country.replace(" ","");
-            }
-            if(city.indexOf(" ") == 0){
-                city = city.replace(" ","");
-            }
-            if(units.indexOf(" ") == 0){
-                units = units.replace(" ", "");
-            }
-            uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
-        }else{
-            if(city.indexOf(" ") == 0){
-                city = city.replace(" ","");
-            }
-            if(units.indexOf(" ") == 0){
-                units = units.replace(" ", "");
-            }
-            uri = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
-        }
-        
-        var tempunit = {imperial:"°F", metric:"°C", other:"°K"};
-        var speedunit = {imperial:"mph", metric:"km/h",other: ""};
-        var pressureunit = {imperial:"bar", metric:"bar",other: "bar"};
-        if(units == "" || units == undefined || units == null){
-            units = "other";
-        }
-        logger.info(uri);
-        http(uri, function(error,response,body){
-            if(error == null){
-                var r = JSON.parse(body);
-                if(r.cod == 200){
-                    var sunrise = new Date(r.sys.sunrise);
-                    var sunset = new Date(r.sys.sunset);
-                    var output = "\n"+
-                                 "**Weather:** "+r.weather[0].description + "\n" +
-                                 "**Temperature: **" + r.main.temp + tempunit[units] + "\n"+ 
-                                 "**Pressure:** " + r.main.pressure + " "+ pressureunit[units] +"\n" +
-                                 "**Humidity:** " + r.main.humidity + "%" + "\n" +
-                                 "**Temp min:** " + r.main.temp + tempunit[units] + "\n" +
-                                 "**Temp max:** " + r.main.temp + tempunit[units] + "\n" +
-                                 "**Wind speed:** "+ r.wind.speed + " " + speedunit[units] +" at "+r.wind.deg+"deg"+ "\n";
-
-                    self.message.reply(output);
-                }else{
-                    self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: !weather [metric/imperial], New York, US");
+        try {
+            var self = this;
+            var args    = this.args.join(" ").split(",");
+            var city    = args[1];
+            var country = args[2];
+            var units   = args[0];
+            logger.info(args.length);
+            var uri     = "";
+            if(args.length >= 3){
+                logger.info("with country");
+                if(country.indexOf(" ") == 0){
+                    country = country.replace(" ","");
                 }
+                if(city.indexOf(" ") == 0){
+                    city = city.replace(" ","");
+                }
+                if(units.indexOf(" ") == 0){
+                    units = units.replace(" ", "");
+                }
+                uri     = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+","+encodeURIComponent(country)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
+            }else{
+                if(city.indexOf(" ") == 0){
+                    city = city.replace(" ","");
+                }
+                if(units.indexOf(" ") == 0){
+                    units = units.replace(" ", "");
+                }
+                uri = "http://api.openweathermap.org/data/2.5/weather?q="+encodeURIComponent(city)+"&appid=fb5b18870aa0056982adc2de9a8d4b55&units="+units;
             }
-        });
+            
+            var tempunit = {imperial:"°F", metric:"°C", other:"°K"};
+            var speedunit = {imperial:"mph", metric:"km/h",other: ""};
+            var pressureunit = {imperial:"bar", metric:"bar",other: "bar"};
+            if(units == "" || units == undefined || units == null){
+                units = "other";
+            }
+            logger.info(uri);
+            http(uri, function(error,response,body){
+                if(error == null){
+                    var r = JSON.parse(body);
+                    if(r.cod == 200){
+                        var sunrise = new Date(r.sys.sunrise);
+                        var sunset = new Date(r.sys.sunset);
+                        var output = "\n"+
+                                    "**Weather:** "+r.weather[0].description + "\n" +
+                                    "**Temperature: **" + r.main.temp + tempunit[units] + "\n"+ 
+                                    "**Pressure:** " + r.main.pressure + " "+ pressureunit[units] +"\n" +
+                                    "**Humidity:** " + r.main.humidity + "%" + "\n" +
+                                    "**Temp min:** " + r.main.temp + tempunit[units] + "\n" +
+                                    "**Temp max:** " + r.main.temp + tempunit[units] + "\n" +
+                                    "**Wind speed:** "+ r.wind.speed + " " + speedunit[units] +" at "+r.wind.deg+"deg"+ "\n";
+
+                        self.message.reply(output);
+                    }else{
+                        self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: !weather [metric/imperial], New York, US");
+                    }
+                }
+            });
+        } catch (error) {
+            console.log(error);            
+        }
         
     }
     Evo(){

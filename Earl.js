@@ -23,6 +23,10 @@ class Command{
         var id = this.args[0].match(/\d+/g)[0];
         var member = this.message.guild.members.get(id);
         var joinedDate = new Date(member.joinedAt); 
+        var hrole = member.presence.name;
+        if(hrole.includes("@")){
+            hrole.replace("@","");
+        }
         var output = 
             "\n**Username:** "+ member.user.username +
             "\n**Nickname:** "+ member.nickname +
@@ -104,13 +108,11 @@ class Command{
                                  "**Humidity:** " + r.main.humidity + "%" + "\n" +
                                  "**Temp min:** " + r.main.temp + tempunit[units] + "\n" +
                                  "**Temp max:** " + r.main.temp + tempunit[units] + "\n" +
-                                 "**Wind speed:** "+ r.wind.speed + " " + speedunit[units] +" at "+r.wind.deg+"deg"+ "\n" +
-                                 "**Sunrise**: "+ sunrise.getHours()+":"+sunrise.getMinutes() + "\n" +
-                                 "**Sunset**: "+ sunset.getHours()+":"+sunset.getMinutes() + "\n" ;
+                                 "**Wind speed:** "+ r.wind.speed + " " + speedunit[units] +" at "+r.wind.deg+"deg"+ "\n";
 
                     self.message.reply(output);
                 }else{
-                    self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: !weather [metric/imperial], Bear Mountain, US");
+                    self.message.reply("Sorry buddy I don't know that place, maybe if you tell me in which country it is by adding , CountryCode __example__: !weather [metric/imperial], New York, US");
                 }
             }
         });
@@ -124,6 +126,22 @@ class Command{
         http(uri+"/shop?text="+input,function(error, response, body){
             const dom = new JSDOM(body);
             var result = dom.window.document.querySelector(".results-products .results-product-thumbs a");
+            if(result != null){
+                self.message.reply(uri+result.href);
+            }else{
+                self.message.reply("Sorry buddy, I\'m afraid I can't find that.");
+            }
+        });
+    }
+    Tomato(){
+        var uri = "https://www.blue-tomato.com";
+        var input = encodeURIComponent(this.args.join(" "));
+        var self = this;
+
+        http(uri+"/products/categories/Snowboard-00000000/?q="+encodeURI(input),function(error,response,body){
+            var dom = new JSDOM(body);
+            var result = dom.window.document.querySelector("#productList ul li#p0 a");
+            
             if(result != null){
                 self.message.reply(uri+result.href);
             }else{
@@ -179,6 +197,9 @@ bot.on("message", function(message){
                 break;
             case "evo":
                 command.Evo();
+                break;
+            case "bt":
+                command.Tomato();
                 break;
         }
     }

@@ -173,44 +173,46 @@ bot.on("ready", () => {
     logger.info("Connected");
     logger.info("Logged in as: " + bot.user.username);
 });
+try {
+    bot.on("message", function(message){
+        logger.info(message.content);
 
-bot.on("message", function(message){
-    logger.info(message.content);
+        if(message.content.substring(0,1) == '!'){
+            var command = new Command(message);
 
-    if(message.content.substring(0,1) == '!'){
-        var command = new Command(message);
-
-        switch(command.cmd){
-            case "test":
-                command.Test();
-                break;
-            case "userinfo":
-                command.Userinfo();
-                break;
-            case "google":
-                command.Google();
-                break;
-            case "urban":
-                command.Urban();
-                break;
-            case "weather":
-                command.Weather();
-                break;
-            case "help":
-                command.Help();
-                break;
-            case "evo":
-                command.Evo();
-                break;
-            case "bt":
-                command.Tomato();
-                break;
+            switch(command.cmd){
+                case "test":
+                    command.Test();
+                    break;
+                case "userinfo":
+                    command.Userinfo();
+                    break;
+                case "google":
+                    command.Google();
+                    break;
+                case "urban":
+                    command.Urban();
+                    break;
+                case "weather":
+                    command.Weather();
+                    break;
+                case "help":
+                    command.Help();
+                    break;
+                case "evo":
+                    command.Evo();
+                    break;
+                case "bt":
+                    command.Tomato();
+                    break;
+            }
         }
-    }
-    if(message.content.toLowerCase().includes("hey earl")){
-        message.channel.send(`Hey ${message.member}`);
-    }
-    
-});
-
+        if(message.content.toLowerCase().includes("hey earl")){
+            message.channel.send(`Hey ${message.member}`);
+        }
+        
+    });
+} catch (exception){
+    console.log(exception);
+}
 bot.login(auth.token);

@@ -1,6 +1,9 @@
+
 # Earl Discord Bot
 
-Earl is a feature-rich Discord bot written in TypeScript. It provides fun and useful commands for your server, including weather, Urban Dictionary, Google search, and more.
+Earl is a feature-rich Discord bot written in TypeScript. It was originally created for a snowboarding Discord community, providing quick access to gear searches, weather, and fun utilities for riders. Over time, it has grown to include a variety of general-purpose and entertainment commands for any server.
+
+It provides fun and useful commands for your server, including weather, Urban Dictionary, Google search, and more.
 
 ## Features
 
